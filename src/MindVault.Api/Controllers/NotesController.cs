@@ -1,9 +1,11 @@
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MindVault.Api.Data;
 using MindVault.Api.Models;
 using System.Security.Claims;
+
 
 namespace MindVault.Api.Controllers
 {
@@ -64,5 +66,23 @@ namespace MindVault.Api.Controllers
             await _db.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpGet("{id}/links")]
+        public async Task<IActionResult> GetLinks(Guid id)
+        {
+            var outgoing = await _db.NoteLinks.Where(nl => nl.FromNoteId == id).ToListAsync();
+            var incoming = await _db.NoteLinks.Where(nl => nl.ToNoteId == id).ToListAsync();
+            return Ok(new { outgoing, incoming });
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string q)
+        {
+            if (string.IsNullOrWhiteSpace(q)) return BadRequest();
+            var ids = _searchService.Search(q);
+            var notes = await _db.Notes.Where(n => ids.Contains(n.Id)).ToListAsync();
+            return Ok(notes);
+        }
+
     }
 }

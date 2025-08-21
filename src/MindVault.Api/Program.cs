@@ -43,6 +43,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<SearchService>();
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
     policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:5002","http://localhost:5002")));
 

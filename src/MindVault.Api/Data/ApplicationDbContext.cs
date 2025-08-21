@@ -9,5 +9,7 @@ namespace MindVault.Api.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> opts) : base(opts) { }
 
         public DbSet<Note> Notes { get; set; }
+        public DbSet<NoteLink> NoteLinks { get; set; }
+
     }
 }
