@@ -1,0 +1,40 @@
+@page "/login"
+@inject MindVault.Client.Services.ApiService Api
+@inject NavigationManager NavigationManager
+
+<h3>Login</h3>
+
+<div>
+    <input @bind="email" placeholder="Email" />
+</div>
+<div>
+    <input @bind="password" type="password" placeholder="Password" />
+</div>
+<div>
+    <button @onclick="DoLogin">Login</button>
+</div>
+@if (!string.IsNullOrEmpty(error))
+{
+    <div style="color:red">@error</div>
+}
+
+@code {
+    string email = "";
+    string password = "";
+    string? error;
+
+    async Task DoLogin()
+    {
+        error = null;
+        var ok = await Api.LoginAsync(email, password);
+        if (ok)
+        {
+            // navigate to notes page
+            NavigationManager.NavigateTo("/notes");
+        }
+        else
+        {
+            error = "Login fehlgeschlagen. Prüfe Email/Passwort.";
+        }
+    }
+}

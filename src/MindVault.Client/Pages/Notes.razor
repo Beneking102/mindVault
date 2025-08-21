@@ -1,0 +1,28 @@
+@page "/notes"
+@inject MindVault.Client.Services.ApiService Api
+
+<h3>My Notes</h3>
+
+<button @onclick="Load">Load Notes</button>
+
+<ul>
+    @foreach(var n in notes)
+    {
+        <li>@n.Title (@n.UpdatedAt)</li>
+    }
+</ul>
+
+@code {
+    List<MindVault.Client.Services.ApiService.NoteDto> notes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    async Task Load()
+    {
+        notes = await Api.GetNotesAsync();
+        StateHasChanged();
+    }
+}
